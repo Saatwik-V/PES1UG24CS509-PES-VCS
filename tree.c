@@ -17,6 +17,9 @@
 #include <sys/stat.h>
 #include "index.h"
 
+// Implemented in object.c
+int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out);
+
 // ─── Mode Constants ────────────
 
 #define MODE_FILE      0100644
@@ -114,7 +117,7 @@ int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
     *len_out = offset;
     return 0;
 }
-int build_tree(IndexEntry *entries, int count, const char *prefix, ObjectID *out_id) {
+static int build_tree(IndexEntry *entries, int count, const char *prefix, ObjectID *out_id) {
     Tree tree;
     tree.count = 0;
 
@@ -131,6 +134,7 @@ int build_tree(IndexEntry *entries, int count, const char *prefix, ObjectID *out
 
         if (!slash) {
             // file
+            if (tree.count >= MAX_TREE_ENTRIES) return -1;
             TreeEntry *e = &tree.entries[tree.count++];
 
             e->mode = entries[i].mode;
@@ -164,6 +168,7 @@ int build_tree(IndexEntry *entries, int count, const char *prefix, ObjectID *out
             if (build_tree(entries, count, new_prefix, &sub_id) != 0)
                 return -1;
 
+            if (tree.count >= MAX_TREE_ENTRIES) return -1;
             TreeEntry *e = &tree.entries[tree.count++];
             e->mode = MODE_DIR;
             strcpy(e->name, dirname);
@@ -201,22 +206,10 @@ int build_tree(IndexEntry *entries, int count, const char *prefix, ObjectID *out
 //
 // Returns 0 on success, -1 on error.
 int tree_from_index(ObjectID *id_out) {
-    // TODO: Implement recursive tree building
-    // (See Lab Appendix for logical steps)
-    Tree tree;
-    tree.count = 0;
+    if (!id_out) return -1;
 
-    void *data;
-    size_t len;
+    Index index;
+    if (index_load(&index) != 0) return -1;
 
-    if (tree_serialize(&tree, &data, &len) != 0)
-        return -1;
-
-    if (object_write(OBJ_TREE, data, len, id_out) != 0) {
-        free(data);
-        return -1;
-    }
-
-    free(data);
-    return 0;
+    return build_tree(index.entries, index.count, NULL, id_out);
 }
