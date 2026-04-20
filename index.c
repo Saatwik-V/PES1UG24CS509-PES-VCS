@@ -278,7 +278,13 @@ int index_add(Index *index, const char *path) {
     strncpy(e->path, path, sizeof(e->path) - 1);
     e->path[sizeof(e->path) - 1] = '\0';
 
-    e->mode = st.st_mode;
+    // Compute Git-style mode: 100644 (regular) or 100755 (executable)
+    if (st.st_mode & S_IXUSR) {
+        e->mode = 0100755;  // executable
+    } else {
+        e->mode = 0100644;  // regular file
+    }
+    
     e->mtime_sec = st.st_mtime;
     e->size = st.st_size;
 
