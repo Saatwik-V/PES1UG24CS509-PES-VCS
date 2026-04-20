@@ -23,6 +23,10 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <time.h>
+
+// Implemented in object.c
+int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out);
 
 static int compare_index(const void *a, const void *b) {
     return strcmp(((IndexEntry*)a)->path, ((IndexEntry*)b)->path);
@@ -247,7 +251,11 @@ int index_add(Index *index, const char *path) {
         return -1;
     }
 
-    fread(data, 1, size, f);
+    if (size > 0 && fread(data, 1, size, f) != size) {
+        fclose(f);
+        free(data);
+        return -1;
+    }
     fclose(f);
 
     ObjectID id;
