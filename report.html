@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      word-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="pes-vcs-submission-checklist-and-report">PES-VCS Submission Checklist and Report</h1>
+<p>This README is rewritten as a submission-focused report with direct evidence links and complete answers for Phase 5 and Phase 6.</p>
+<h2 id="submission-checklist">1. Submission Checklist</h2>
+<ul class="task-list">
+<li><input type="checkbox" disabled="" checked="" />
+Repository contains required source files (<code>object.c</code>, <code>tree.c</code>, <code>index.c</code>, <code>commit.c</code>, headers, tests, <code>Makefile</code>)</li>
+<li><input type="checkbox" disabled="" checked="" />
+Screenshot evidence is available for Phases 1 to 5</li>
+<li><input type="checkbox" disabled="" checked="" />
+Phase 5 analysis questions answered</li>
+<li><input type="checkbox" disabled="" checked="" />
+Phase 6 analysis questions answered</li>
+<li><input type="checkbox" disabled="" checked="" />
+PDF report generated at repository root: <code>report.pdf</code></li>
+</ul>
+<h2 id="screenshot-evidence-inline-preview">2. Screenshot Evidence (Inline Preview)</h2>
+<h3 id="phase-1">Phase 1</h3>
+<p>1A: <code>./test_objects</code> output showing tests passing.</p>
+<figure>
+<img src="screenshots/phase1_1.png" alt="Phase 1A - test_objects output" /><figcaption aria-hidden="true">Phase 1A - test_objects output</figcaption>
+</figure>
+<p>1B: <code>.pes/objects</code> sharded storage evidence.</p>
+<figure>
+<img src="screenshots/phase1_2.png" alt="Phase 1B - objects directory" /><figcaption aria-hidden="true">Phase 1B - objects directory</figcaption>
+</figure>
+<h3 id="phase-2">Phase 2</h3>
+<p>2A: <code>./test_tree</code> output showing tests passing.</p>
+<figure>
+<img src="screenshots/phase2_1.png" alt="Phase 2A - test_tree output" /><figcaption aria-hidden="true">Phase 2A - test_tree output</figcaption>
+</figure>
+<p>2B: Raw tree/object bytes (<code>xxd</code>) evidence.</p>
+<figure>
+<img src="screenshots/phase2_2.png" alt="Phase 2B - xxd output" /><figcaption aria-hidden="true">Phase 2B - xxd output</figcaption>
+</figure>
+<h3 id="phase-3">Phase 3</h3>
+<p>3A: <code>pes init</code> -&gt; <code>pes add</code> -&gt; <code>pes status</code> sequence.</p>
+<figure>
+<img src="screenshots/phase3_1.png" alt="Phase 3A - status output" /><figcaption aria-hidden="true">Phase 3A - status output</figcaption>
+</figure>
+<p>3B: <code>.pes/index</code> text-format staging data.</p>
+<figure>
+<img src="screenshots/phase3_2.png" alt="Phase 3B - index file" /><figcaption aria-hidden="true">Phase 3B - index file</figcaption>
+</figure>
+<h3 id="phase-4">Phase 4</h3>
+<p>4A: <code>pes log</code> output showing commit history.</p>
+<figure>
+<img src="screenshots/phase4_1.png" alt="Phase 4A - log output" /><figcaption aria-hidden="true">Phase 4A - log output</figcaption>
+</figure>
+<p>4B: <code>.pes</code> file growth / stored objects evidence.</p>
+<figure>
+<img src="screenshots/phase4_2.png" alt="Phase 4B - .pes files" /><figcaption aria-hidden="true">Phase 4B - .pes files</figcaption>
+</figure>
+<p>4C: Branch reference and <code>HEAD</code> pointer evidence.</p>
+<figure>
+<img src="screenshots/phase4_3.png" alt="Phase 4C - refs and HEAD" /><figcaption aria-hidden="true">Phase 4C - refs and HEAD</figcaption>
+</figure>
+<h3 id="phase-5">Phase 5</h3>
+<p>5A: Integration test evidence.</p>
+<figure>
+<img src="screenshots/phase5_1.png" alt="Phase 5A - integration test output" /><figcaption aria-hidden="true">Phase 5A - integration test output</figcaption>
+</figure>
+<h2 id="phase-5-questions-and-answers">3. Phase 5 Questions and Answers</h2>
+<h3 id="q5.1">Q5.1</h3>
+<p><strong>Question:</strong> A branch in Git is just a file in <code>.git/refs/heads/</code> containing a commit hash. Creating a branch is creating a file. Given this, how would you implement <code>pes checkout &lt;branch&gt;</code> - what files need to change in <code>.pes/</code>, and what must happen to the working directory? What makes this operation complex?</p>
+<p><strong>Answer:</strong> To implement <code>pes checkout &lt;branch&gt;</code> in PES-VCS:</p>
+<ol type="1">
+<li>Resolve branch target:
+<ul>
+<li>Read <code>.pes/refs/heads/&lt;branch&gt;</code> to get the target commit hash.</li>
+<li>If branch does not exist, fail with an error.</li>
+</ul></li>
+<li>Update pointer metadata in <code>.pes/</code>:
+<ul>
+<li>Rewrite <code>.pes/HEAD</code> as <code>ref: refs/heads/&lt;branch&gt;</code> (for normal branch checkout).</li>
+<li>Keep <code>.pes/refs/heads/&lt;branch&gt;</code> unchanged during checkout; only <code>HEAD</code> changes here.</li>
+</ul></li>
+<li>Materialize the target commit snapshot into working directory:
+<ul>
+<li>Read target commit object, then target tree hash.</li>
+<li>Recursively traverse tree objects.</li>
+<li>For each blob entry, write file bytes to working directory path and set executable bit from mode.</li>
+<li>For entries missing in target tree but present in current tracked state, delete those files.</li>
+<li>Create/remove directories to exactly match the tree.</li>
+</ul></li>
+<li>Rebuild index to match checked-out tree:
+<ul>
+<li>Replace <code>.pes/index</code> entries so index becomes a clean mirror of checked-out commit tree.</li>
+</ul></li>
+</ol>
+<p>Why this is complex: - Checkout is not only pointer switching; it is a full filesystem transformation. - It must avoid data loss when local uncommitted edits overlap files changed by target branch. - It requires recursive tree diff/apply logic and careful file ordering (delete/overwrite/create) for correctness.</p>
+<h3 id="q5.2">Q5.2</h3>
+<p><strong>Question:</strong> When switching branches, the working directory must be updated to match the target branch’s tree. If the user has uncommitted changes to a tracked file, and that file differs between branches, checkout must refuse. Describe how you would detect this “dirty working directory” conflict using only the index and the object store.</p>
+<p><strong>Answer:</strong> A practical conflict-detection algorithm:</p>
+<ol type="1">
+<li>Build <code>HEAD_tracked_set</code> from current <code>HEAD</code> commit tree (path -&gt; blob hash, mode).</li>
+<li>Build <code>TARGET_tracked_set</code> from target branch commit tree (path -&gt; blob hash, mode).</li>
+<li>Build <code>INDEX_set</code> from <code>.pes/index</code> (path -&gt; staged blob hash, mode, mtime, size).</li>
+<li>For each path in <code>HEAD_tracked_set</code>:
+<ul>
+<li>Determine whether file is locally dirty:
+<ul>
+<li>If missing in working directory, mark dirty (possible deletion).</li>
+<li>Else compare working file metadata (<code>mtime</code>, <code>size</code>) with index entry.</li>
+<li>If metadata differs, optionally re-hash file and compare with index blob hash for exact check.</li>
+</ul></li>
+<li>Determine whether branch switch would modify that path:
+<ul>
+<li>Path missing in target OR target blob hash/mode differs from current HEAD blob hash/mode.</li>
+</ul></li>
+<li>If both are true, abort checkout with conflict message.</li>
+</ul></li>
+</ol>
+<p>This catches exactly the unsafe case: local edits on a path that checkout would overwrite/delete.</p>
+<h3 id="q5.3">Q5.3</h3>
+<p><strong>Question:</strong> “Detached HEAD” means HEAD contains a commit hash directly instead of a branch reference. What happens if you make commits in this state? How could a user recover those commits?</p>
+<p><strong>Answer:</strong> In detached HEAD state:</p>
+<ul>
+<li>New commits are created normally, but no branch ref advances to point at them.</li>
+<li><code>HEAD</code> moves commit-to-commit directly, forming a temporary history chain.</li>
+<li>If user later checks out a normal branch, these detached commits may become unreachable from branch refs.</li>
+</ul>
+<p>Recovery methods:</p>
+<ol type="1">
+<li>Immediate recovery (best): create a branch at current detached commit.
+<ul>
+<li>Example concept: create <code>.pes/refs/heads/recover</code> containing current commit hash.</li>
+<li>Then set <code>.pes/HEAD</code> to <code>ref: refs/heads/recover</code>.</li>
+</ul></li>
+<li>Delayed recovery: if hash is known from logs/output, create a new branch file pointing to that hash.</li>
+</ol>
+<p>Main idea: make at least one branch/reference point to those commits before garbage collection, so they stay reachable.</p>
+<h2 id="phase-6-questions-and-answers">4. Phase 6 Questions and Answers</h2>
+<h3 id="q6.1">Q6.1</h3>
+<p><strong>Question:</strong> Over time, the object store accumulates unreachable objects - blobs, trees, or commits that no branch points to (directly or transitively). Describe an algorithm to find and delete these objects. What data structure would you use to track “reachable” hashes efficiently? For a repository with 100,000 commits and 50 branches, estimate how many objects you’d need to visit.</p>
+<p><strong>Answer:</strong> Algorithm (mark-and-sweep):</p>
+<ol type="1">
+<li>Mark phase - find reachable objects:
+<ul>
+<li>Initialize a queue/stack with all branch tip commits from <code>.pes/refs/heads/*</code>.</li>
+<li>Use a hash set <code>reachable</code> keyed by 32-byte object ID (or 64-char hex string).</li>
+<li>DFS/BFS traversal:
+<ul>
+<li>If object already in <code>reachable</code>, skip.</li>
+<li>Else add it and read object type.</li>
+<li>For commit: enqueue its tree and parent (if present).</li>
+<li>For tree: enqueue all child entry hashes (blob/tree).</li>
+<li>For blob: no children.</li>
+</ul></li>
+</ul></li>
+<li>Sweep phase - delete unreachable objects:
+<ul>
+<li>Iterate over every object file in <code>.pes/objects/*/*</code>.</li>
+<li>Reconstruct object ID from path.</li>
+<li>If ID not in <code>reachable</code>, delete object file.</li>
+</ul></li>
+</ol>
+<p>Data structure choice: - Hash set provides expected O(1) membership for large object graphs. - Queue/stack for traversal frontier.</p>
+<p>Scale estimate: - 100,000 commits with one parent each means up to about 100,000 unique commit nodes to visit (often fewer due to shared history among branches). - Trees/blobs dominate count. If average commit introduces around 1 new tree and a few new blobs, total reachable objects can be several hundred thousand to over a million depending on churn. - So GC traversal should be designed for roughly O(number of reachable objects + total objects on disk).</p>
+<h3 id="q6.2">Q6.2</h3>
+<p><strong>Question:</strong> Why is it dangerous to run garbage collection concurrently with a commit operation? Describe a race condition where GC could delete an object that a concurrent commit is about to reference. How does Git’s real GC avoid this?</p>
+<p><strong>Answer:</strong> Danger comes from non-atomic multi-step commit creation:</p>
+<ol type="1">
+<li>Commit process writes new blob/tree/commit objects.</li>
+<li>Only at the end does it update a branch ref to make new commit reachable.</li>
+</ol>
+<p>Race example: - Commit writer creates new tree object T and commit object C. - Before ref update (<code>refs/heads/main -&gt; C</code>) happens, GC scans refs and cannot see C/T as reachable. - GC deletes C or T as “unreachable”. - Commit then updates ref to C, but object is missing/corrupt history.</p>
+<p>How real Git avoids this: - Uses reachability closure including reflogs and recent objects. - Uses safety windows/pruning grace periods (<code>gc.pruneExpire</code>) so very new unreachable objects are not immediately deleted. - Coordinates maintenance with locking and careful object/pack handling so writers and GC do not invalidate each other.</p>
+<h2 id="final-notes">5. Final Notes</h2>
+<ul>
+<li>Keep at least 5 meaningful commits per phase in Git history.</li>
+<li>Keep this README and <code>report.pdf</code> at repository root for submission.</li>
+<li>All screenshot paths above are repository-relative and directly clickable.</li>
+</ul>
+</body>
+</html>
