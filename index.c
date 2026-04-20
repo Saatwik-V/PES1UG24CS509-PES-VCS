@@ -205,16 +205,23 @@ int index_save(const Index *index) {
     // Ensure .pes directory exists
     mkdir(".pes", 0755);
 
-    Index temp = *index;
-    if (temp.count > 0) {
-        qsort(temp.entries, temp.count, sizeof(IndexEntry), compare_index);
+    // Create sorted copy of entries (only what we write, not the whole 5MB struct!)
+    IndexEntry *sorted_entries = malloc(index->count * sizeof(IndexEntry));
+    if (!sorted_entries && index->count > 0) return -1;
+
+    if (index->count > 0) {
+        memcpy(sorted_entries, index->entries, index->count * sizeof(IndexEntry));
+        qsort(sorted_entries, index->count, sizeof(IndexEntry), compare_index);
     }
 
     FILE *f = fopen(".pes/index.tmp", "w");
-    if (!f) return -1;
+    if (!f) {
+        free(sorted_entries);
+        return -1;
+    }
 
-    for (int i = 0; i < temp.count; i++) {
-        IndexEntry *e = &temp.entries[i];
+    for (int i = 0; i < index->count; i++) {
+        IndexEntry *e = &sorted_entries[i];
 
         char hash_hex[65];
         for (int j = 0; j < 32; j++) {
@@ -233,23 +240,28 @@ int index_save(const Index *index) {
     if (fflush(f) != 0) {
         fclose(f);
         unlink(".pes/index.tmp");
+        free(sorted_entries);
         return -1;
     }
     if (fsync(fileno(f)) != 0) {
         fclose(f);
         unlink(".pes/index.tmp");
+        free(sorted_entries);
         return -1;
     }
     if (fclose(f) != 0) {
         unlink(".pes/index.tmp");
+        free(sorted_entries);
         return -1;
     }
 
     if (rename(".pes/index.tmp", ".pes/index") != 0) {
         unlink(".pes/index.tmp");
+        free(sorted_entries);
         return -1;
     }
 
+    free(sorted_entries);
     return 0;
 }
 
