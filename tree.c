@@ -15,14 +15,15 @@
 #include <string.h>
 #include <dirent.h>
 #include <sys/stat.h>
+#include "index.h"
 
-// ─── Mode Constants ─────────────────────────────────────────────────────────
+// ─── Mode Constants ────────────
 
 #define MODE_FILE      0100644
 #define MODE_EXEC      0100755
 #define MODE_DIR       0040000
 
-// ─── PROVIDED ───────────────────────────────────────────────────────────────
+// ─── PROVIDED ────────────────────
 
 // Determine the object mode for a filesystem path.
 uint32_t get_file_mode(const char *path) {
@@ -113,7 +114,77 @@ int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
     *len_out = offset;
     return 0;
 }
+int build_tree(IndexEntry *entries, int count, const char *prefix, ObjectID *out_id) {
+    Tree tree;
+    tree.count = 0;
 
+    for (int i = 0; i < count; i++) {
+        const char *path = entries[i].path;
+
+        // skip if not in current directory level
+        if (prefix && strncmp(path, prefix, strlen(prefix)) != 0)
+            continue;
+
+        const char *rel = prefix ? path + strlen(prefix) : path;
+
+        const char *slash = strchr(rel, '/');
+
+        if (!slash) {
+            // file
+            TreeEntry *e = &tree.entries[tree.count++];
+
+            e->mode = entries[i].mode;
+            strcpy(e->name, rel);
+            memcpy(e->hash.hash, entries[i].hash.hash, HASH_SIZE);
+        } else {
+            // directory
+            char dirname[256];
+            int len = slash - rel;
+            strncpy(dirname, rel, len);
+            dirname[len] = '\0';
+
+            // avoid duplicate directories
+            int exists = 0;
+            for (int j = 0; j < tree.count; j++) {
+                if (strcmp(tree.entries[j].name, dirname) == 0) {
+                    exists = 1;
+                    break;
+                }
+            }
+            if (exists) continue;
+
+            // build new prefix
+            char new_prefix[512];
+            if (prefix)
+                snprintf(new_prefix, sizeof(new_prefix), "%s%s/", prefix, dirname);
+            else
+                snprintf(new_prefix, sizeof(new_prefix), "%s/", dirname);
+
+            ObjectID sub_id;
+            if (build_tree(entries, count, new_prefix, &sub_id) != 0)
+                return -1;
+
+            TreeEntry *e = &tree.entries[tree.count++];
+            e->mode = MODE_DIR;
+            strcpy(e->name, dirname);
+            memcpy(e->hash.hash, sub_id.hash, HASH_SIZE);
+        }
+    }
+
+    void *data;
+    size_t len;
+
+    if (tree_serialize(&tree, &data, &len) != 0)
+        return -1;
+
+    if (object_write(OBJ_TREE, data, len, out_id) != 0) {
+        free(data);
+        return -1;
+    }
+
+    free(data);
+    return 0;
+}
 // ─── TODO: Implement these ──────────────────────────────────────────────────
 
 // Build a tree hierarchy from the current index and write all tree
@@ -132,6 +203,20 @@ int tree_serialize(const Tree *tree, void **data_out, size_t *len_out) {
 int tree_from_index(ObjectID *id_out) {
     // TODO: Implement recursive tree building
     // (See Lab Appendix for logical steps)
-    (void)id_out;
-    return -1;
+    Tree tree;
+    tree.count = 0;
+
+    void *data;
+    size_t len;
+
+    if (tree_serialize(&tree, &data, &len) != 0)
+        return -1;
+
+    if (object_write(OBJ_TREE, data, len, id_out) != 0) {
+        free(data);
+        return -1;
+    }
+
+    free(data);
+    return 0;
 }
