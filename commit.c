@@ -24,7 +24,7 @@
 #include <time.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <time.h>
+#include <sys/stat.h>
 
 // Forward declarations (implemented in object.c)
 int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out);
@@ -159,6 +159,10 @@ int head_update(const ObjectID *new_commit) {
     char target_path[520];
     if (strncmp(line, "ref: ", 5) == 0) {
         snprintf(target_path, sizeof(target_path), "%s/%s", PES_DIR, line + 5);
+        // Ensure directory exists
+        char dir[512];
+        snprintf(dir, sizeof(dir), "%s/refs/heads", PES_DIR);
+        mkdir(dir, 0755);
     } else {
         snprintf(target_path, sizeof(target_path), "%s", HEAD_FILE); // Detached HEAD
     }
@@ -195,14 +199,13 @@ int head_update(const ObjectID *new_commit) {
 //
 // Returns 0 on success, -1 on error.
 int commit_create(const char *message, ObjectID *commit_id_out) {
-    // TODO: Implement commit creation
-    // (See Lab Appendix for logical steps)
+    // 1. Build tree from index
     ObjectID tree_id;
     if (tree_from_index(&tree_id) != 0) {
         return -1;
     }
 
-    // 2. Read parent commit (HEAD)
+    // 2. Read parent commit (HEAD) — may fail on first commit (no parent)
     ObjectID parent_id;
     int has_parent = (head_read(&parent_id) == 0);
 
@@ -246,7 +249,7 @@ int commit_create(const char *message, ObjectID *commit_id_out) {
 
     free(data);
 
-    // 7. Update HEAD
+    // 7. Update HEAD (create branch ref if needed)
     if (head_update(commit_id_out) != 0) {
         return -1;
     }

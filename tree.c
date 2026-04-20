@@ -227,16 +227,13 @@ int tree_from_index(ObjectID *id_out) {
         return -1;
     }
 
-    if (!index_load || !object_write) {
-        return -1;
-    }
-
     Index index;
     if (index_load(&index) != 0) {
         return -1;
     }
 
     if (index.count == 0) {
+        // Empty tree for empty index
         Tree empty_tree = {0};
         void *serialized = NULL;
         size_t serialized_len = 0;
