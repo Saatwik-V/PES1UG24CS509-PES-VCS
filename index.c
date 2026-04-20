@@ -144,16 +144,17 @@ int index_status(const Index *index) {
 int index_load(Index *index) {
     // TODO: Implement index loading
     // (See Lab Appendix for logical steps)
+    if (!index) return -1;
     index->count = 0;
 
     FILE *f = fopen(".pes/index", "r");
-    if (!f) return 0;
+    if (!f) return 0;  // File doesn't exist yet — empty index is OK
 
     while (index->count < MAX_INDEX_ENTRIES) {
         IndexEntry *e = &index->entries[index->count];
         char hash_hex[65];
 
-        int ret = fscanf(f, "%o %64s %lu %u %[^\n]\n",
+        int ret = fscanf(f, "%o %64s %lu %u %511s\n",
                          &e->mode,
                          hash_hex,
                          &e->mtime_sec,
@@ -162,14 +163,26 @@ int index_load(Index *index) {
 
         if (ret != 5) break;
 
+        // Parse hex hash safely
+        int parse_ok = 1;
         for (int i = 0; i < 32; i++) {
-            sscanf(hash_hex + i * 2, "%2hhx", &e->hash.hash[i]);
+            unsigned int byte;
+            if (sscanf(hash_hex + i * 2, "%2x", &byte) != 1) {
+                parse_ok = 0;
+                break;
+            }
+            e->hash.hash[i] = (uint8_t)byte;
+        }
+        
+        if (!parse_ok) {
+            fclose(f);
+            return -1;  // Corrupted hash format
         }
 
         index->count++;
     }
 
-    fclose(f);
+    if (fclose(f) != 0) return -1;
     return 0;
 }
 
@@ -187,9 +200,15 @@ int index_load(Index *index) {
 int index_save(const Index *index) {
     // TODO: Implement atomic index saving
     // (See Lab Appendix for logical steps)
-    Index temp = *index;
+    if (!index) return -1;
 
-    qsort(temp.entries, temp.count, sizeof(IndexEntry), compare_index);
+    // Ensure .pes directory exists
+    mkdir(".pes", 0755);
+
+    Index temp = *index;
+    if (temp.count > 0) {
+        qsort(temp.entries, temp.count, sizeof(IndexEntry), compare_index);
+    }
 
     FILE *f = fopen(".pes/index.tmp", "w");
     if (!f) return -1;
@@ -211,11 +230,25 @@ int index_save(const Index *index) {
                 e->path);
     }
 
-    fflush(f);
-    fsync(fileno(f));
-    fclose(f);
+    if (fflush(f) != 0) {
+        fclose(f);
+        unlink(".pes/index.tmp");
+        return -1;
+    }
+    if (fsync(fileno(f)) != 0) {
+        fclose(f);
+        unlink(".pes/index.tmp");
+        return -1;
+    }
+    if (fclose(f) != 0) {
+        unlink(".pes/index.tmp");
+        return -1;
+    }
 
-    rename(".pes/index.tmp", ".pes/index");
+    if (rename(".pes/index.tmp", ".pes/index") != 0) {
+        unlink(".pes/index.tmp");
+        return -1;
+    }
 
     return 0;
 }
@@ -234,14 +267,13 @@ int index_add(Index *index, const char *path) {
     // (See Lab Appendix for logical steps)
     if (!index || !path) return -1;
 
-    FILE *f = fopen(path, "rb");
-    if (!f) return -1;
-
     struct stat st;
     if (stat(path, &st) != 0) {
-        fclose(f);
-        return -1;
+        return -1;  // File doesn't exist
     }
+
+    FILE *f = fopen(path, "rb");
+    if (!f) return -1;
 
     size_t size = st.st_size;
 
@@ -251,12 +283,19 @@ int index_add(Index *index, const char *path) {
         return -1;
     }
 
-    if (size > 0 && fread(data, 1, size, f) != size) {
-        fclose(f);
+    if (size > 0) {
+        size_t read_bytes = fread(data, 1, size, f);
+        if (read_bytes != size) {
+            fclose(f);
+            free(data);
+            return -1;  // Short read or error
+        }
+    }
+    
+    if (fclose(f) != 0) {
         free(data);
         return -1;
     }
-    fclose(f);
 
     ObjectID id;
     if (object_write(OBJ_BLOB, data, size, &id) != 0) {
